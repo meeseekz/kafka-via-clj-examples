@@ -1,0 +1,12 @@
+language: clojure
+
+before_install:
+  - curl -o kafka.zip -sL http://artfiles.org/apache.org/kafka/2.1.0/kafka_2.11-2.1.0.tgz; mkdir kafka_2.11-2.1.0; tar -xvf kafka.zip -C kafka_2.11-2.1.0; rm kafka.zip
+  - cd kafka_2.11-2.1.0/kafka_2.11-2.1.0/
+  - bin/zookeeper-server-start.sh config/zookeeper.properties &
+  - bin/kafka-server-start.sh config/server.properties &
+  - sleep 5
+  - bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+script:
+  - lein test
